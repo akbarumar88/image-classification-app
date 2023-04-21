@@ -50,17 +50,32 @@ export default function About() {
         <img style={{}} src={imgPreview} />
 
         {data ? (
-          <div
-            className="absolute"
-            style={{
-              border: `solid ${boundingBoxWidth}px ${boundingBoxColor}`,
-              position: "absolute",
-              left: data.x1,
-              top: data.y1,
-              width: data.x2 - data.x1,
-              height: data.y2 - data.y1,
-            }}
-          ></div>
+          <>
+            <div
+              className="absolute"
+              style={{
+                border: `solid ${boundingBoxWidth}px ${boundingBoxColor}`,
+                position: "absolute",
+                left: data.x1,
+                top: data.y1,
+                width: data.x2 - data.x1,
+                height: data.y2 - data.y1,
+              }}
+            ></div>
+
+            <p
+              style={{
+                color: boundingBoxColor,
+                fontWeight: "bold",
+                fontSize: 32,
+                position: "absolute",
+                left: data.x1,
+                top: data.y1,
+              }}
+            >
+              {data.label}
+            </p>
+          </>
         ) : null}
       </div>
 
