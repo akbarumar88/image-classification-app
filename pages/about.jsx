@@ -1,5 +1,6 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import axios from "axios";
+import Link from "next/link";
 
 const BASE_URL = "http://localhost:5000";
 
@@ -10,6 +11,28 @@ export default function About() {
   const [data, setData] = useState(null);
   const [boundingBoxColor, setBoundingBoxColor] = useState("red");
   const [boundingBoxWidth, setBoundingBoxWidth] = useState("4");
+
+  useEffect(() => {
+    /**
+     *  RECOMMENDED CONFIGURATION VARIABLES: EDIT AND UNCOMMENT THE SECTION BELOW TO INSERT DYNAMIC VALUES FROM YOUR PLATFORM OR CMS.
+     *  LEARN WHY DEFINING THESE VARIABLES IS IMPORTANT: https://disqus.com/admin/universalcode/#configuration-variables    */
+
+    var disqus_config = function () {
+      this.page.url = "https://toko-cek-aja.com"; // Replace PAGE_URL with your page's canonical URL variable
+      this.page.identifier = "aawkwkmxxz"; // Replace PAGE_IDENTIFIER with your page's unique identifier variable
+    };
+
+    (function () {
+      // DON'T EDIT BELOW THIS LINE
+      var d = document,
+        s = d.createElement("script");
+      s.src = "https://the-toko-aja.disqus.com/embed.js";
+      s.setAttribute("data-timestamp", +new Date());
+      (d.head || d.body).appendChild(s);
+    })();
+
+    return () => {};
+  }, []);
 
   const getClassification = () => {
     const formData = new FormData();
@@ -42,43 +65,6 @@ export default function About() {
         padding: 16,
       }}
     >
-      <div
-        style={{
-          position: "relative",
-        }}
-      >
-        <img style={{}} src={imgPreview} />
-
-        {data ? (
-          <>
-            <div
-              className="absolute"
-              style={{
-                border: `solid ${boundingBoxWidth}px ${boundingBoxColor}`,
-                position: "absolute",
-                left: data.x1,
-                top: data.y1,
-                width: data.x2 - data.x1,
-                height: data.y2 - data.y1,
-              }}
-            ></div>
-
-            <p
-              style={{
-                color: boundingBoxColor,
-                fontWeight: "bold",
-                fontSize: 32,
-                position: "absolute",
-                left: data.x1,
-                top: data.y1,
-              }}
-            >
-              {data.label}
-            </p>
-          </>
-        ) : null}
-      </div>
-
       <form
         onSubmit={(e) => {
           e.preventDefault();
@@ -143,7 +129,7 @@ export default function About() {
           <label htmlFor="blue"> Blue</label>
         </div>
 
-        <div class="slidecontainer">
+        <div className="slidecontainer">
           <input
             onChange={(e) => {
               // console.log("onchange slider gan");
@@ -153,7 +139,7 @@ export default function About() {
             type="range"
             min="4"
             max="12"
-            class="slider"
+            className="slider"
             id="myRange"
           />
         </div>
@@ -164,6 +150,42 @@ export default function About() {
           <input type="submit" value="Classify" className="btn" />
         </div>
       </form>
+
+      <div
+        style={{
+          position: "relative",
+        }}
+      >
+        <img style={{}} src={imgPreview} />
+        {data ? (
+          <>
+            <div
+              className="absolute"
+              style={{
+                border: `solid ${boundingBoxWidth}px ${boundingBoxColor}`,
+                position: "absolute",
+                left: data.x1,
+                top: data.y1,
+                width: data.x2 - data.x1,
+                height: data.y2 - data.y1,
+              }}
+            ></div>
+
+            <p
+              style={{
+                color: boundingBoxColor,
+                fontWeight: "bold",
+                fontSize: 32,
+                position: "absolute",
+                left: data.x1,
+                top: data.y1,
+              }}
+            >
+              {data.label}
+            </p>
+          </>
+        ) : null}
+      </div>
     </div>
   );
 }
