@@ -1,16 +1,16 @@
-import React, { useEffect, useState } from "react";
-import axios from "axios";
-import Link from "next/link";
+import React, { useEffect, useState } from "react"
+import axios from "axios"
+import Link from "next/link"
 
-const BASE_URL = "http://localhost:5000";
+const BASE_URL = "http://localhost:5000"
 
 export default function About() {
-  const [selectedImg, setSelectedImg] = useState("");
-  const [imgPreview, setImgPreview] = useState("");
-  const [loading, setLoading] = useState(false);
-  const [data, setData] = useState(null);
-  const [boundingBoxColor, setBoundingBoxColor] = useState("red");
-  const [boundingBoxWidth, setBoundingBoxWidth] = useState("4");
+  const [selectedImg, setSelectedImg] = useState("")
+  const [imgPreview, setImgPreview] = useState("")
+  const [loading, setLoading] = useState(false)
+  const [data, setData] = useState(null)
+  const [boundingBoxColor, setBoundingBoxColor] = useState("red")
+  const [boundingBoxWidth, setBoundingBoxWidth] = useState("4")
 
   useEffect(() => {
     /**
@@ -18,46 +18,46 @@ export default function About() {
      *  LEARN WHY DEFINING THESE VARIABLES IS IMPORTANT: https://disqus.com/admin/universalcode/#configuration-variables    */
 
     var disqus_config = function () {
-      this.page.url = "https://toko-cek-aja.com"; // Replace PAGE_URL with your page's canonical URL variable
-      this.page.identifier = "aawkwkmxxz"; // Replace PAGE_IDENTIFIER with your page's unique identifier variable
-    };
+      this.page.url = "https://toko-cek-aja.com" // Replace PAGE_URL with your page's canonical URL variable
+      this.page.identifier = "aawkwkmxxz" // Replace PAGE_IDENTIFIER with your page's unique identifier variable
+    }
 
-    (function () {
+    ;(function () {
       // DON'T EDIT BELOW THIS LINE
       var d = document,
-        s = d.createElement("script");
-      s.src = "https://the-toko-aja.disqus.com/embed.js";
-      s.setAttribute("data-timestamp", +new Date());
-      (d.head || d.body).appendChild(s);
-    })();
+        s = d.createElement("script")
+      s.src = "https://the-toko-aja.disqus.com/embed.js"
+      s.setAttribute("data-timestamp", +new Date())
+      ;(d.head || d.body).appendChild(s)
+    })()
 
-    return () => {};
-  }, []);
+    return () => {}
+  }, [])
 
   const getClassification = () => {
-    const formData = new FormData();
-    formData.append("sample", selectedImg);
+    const formData = new FormData()
+    formData.append("sample", selectedImg)
 
-    setLoading(true);
+    setLoading(true)
     axios
       .post(`${BASE_URL}/detect`, formData)
       .then(({ data: res }) => {
         // Berhasil Get Data6
-        console.log("berhasil gan", res);
-        setData(res);
+        console.log("berhasil gan", res)
+        setData(res)
       })
       .catch((e) => {
-        console.log("Terjadi Kesalahan saat call API BossQue.");
+        console.log("Terjadi Kesalahan saat call API BossQue.")
       })
       .finally(() => {
-        setLoading(false);
-      });
-  };
+        setLoading(false)
+      })
+  }
 
   const onColorPicked = (e) => {
-    let val = e.target.value;
-    setBoundingBoxColor(val);
-  };
+    let val = e.target.value
+    setBoundingBoxColor(val)
+  }
 
   return (
     <div
@@ -67,9 +67,9 @@ export default function About() {
     >
       <form
         onSubmit={(e) => {
-          e.preventDefault();
+          e.preventDefault()
 
-          getClassification();
+          getClassification()
         }}
       >
         <div className="form-group">
@@ -77,18 +77,18 @@ export default function About() {
           <input
             onChange={(e) => {
               // clear state Data
-              setData(null);
+              setData(null)
 
-              console.log("picture: ", e.target.files);
-              setSelectedImg(e.target.files[0]);
-              const reader = new FileReader();
+              console.log("picture: ", e.target.files)
+              setSelectedImg(e.target.files[0])
+              const reader = new FileReader()
               reader.addEventListener("load", () => {
-                console.log("reader onLoad gan");
-                setImgPreview(reader.result);
-              });
+                console.log("reader onLoad gan")
+                setImgPreview(reader.result)
+              })
 
-              console.log("reader read data gan");
-              reader.readAsDataURL(e.target.files[0]);
+              console.log("reader read data gan")
+              reader.readAsDataURL(e.target.files[0])
             }}
             type="file"
             id="file-upload"
@@ -103,6 +103,8 @@ export default function About() {
             name="color"
             id="red"
             value={"red"}
+            defaultChecked
+            // checked={boundingBoxColor == "red"}
           />
           <label htmlFor="red"> Red</label>
         </div>
@@ -133,12 +135,12 @@ export default function About() {
           <input
             onChange={(e) => {
               // console.log("onchange slider gan");
-              let val = e.target.value;
-              setBoundingBoxWidth(`${val}`);
+              let val = e.target.value
+              setBoundingBoxWidth(`${val}`)
             }}
             type="range"
             min="4"
-            max="12"
+            max="8"
             className="slider"
             id="myRange"
           />
@@ -187,5 +189,5 @@ export default function About() {
         ) : null}
       </div>
     </div>
-  );
+  )
 }
