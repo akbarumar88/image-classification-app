@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react"
 import axios from "axios"
 import Link from "next/link"
+import Loading from "@/components/Loading"
 
 const BASE_URL = "http://localhost:5000"
 
@@ -17,22 +18,17 @@ export default function About() {
      *  RECOMMENDED CONFIGURATION VARIABLES: EDIT AND UNCOMMENT THE SECTION BELOW TO INSERT DYNAMIC VALUES FROM YOUR PLATFORM OR CMS.
      *  LEARN WHY DEFINING THESE VARIABLES IS IMPORTANT: https://disqus.com/admin/universalcode/#configuration-variables    */
 
-    var disqus_config = function () {
-      this.page.url = "https://toko-cek-aja.com" // Replace PAGE_URL with your page's canonical URL variable
-      this.page.identifier = "aawkwkmxxz" // Replace PAGE_IDENTIFIER with your page's unique identifier variable
-    }
-
-    ;(function () {
-      // DON'T EDIT BELOW THIS LINE
-      var d = document,
-        s = d.createElement("script")
-      s.src = "https://the-toko-aja.disqus.com/embed.js"
-      s.setAttribute("data-timestamp", +new Date())
-      ;(d.head || d.body).appendChild(s)
-    })()
-
     return () => {}
   }, [])
+
+  const validate = () => {
+    if (!selectedImg) {
+      alert("Anda belum memilih gambar yang akan diklasifikasikan!")
+      return
+    }
+
+    getClassification()
+  }
 
   const getClassification = () => {
     const formData = new FormData()
@@ -40,7 +36,7 @@ export default function About() {
 
     setLoading(true)
     axios
-      .post(`${BASE_URL}/detect`, formData)
+      .post(`${BASE_URL}/detectbatik`, formData)
       .then(({ data: res }) => {
         // Berhasil Get Data6
         console.log("berhasil gan", res)
@@ -59,8 +55,67 @@ export default function About() {
     setBoundingBoxColor(val)
   }
 
+  const radioAndSlider = () => {
+    return (
+      <>
+        <div>
+          <input
+            onChange={onColorPicked}
+            checked={boundingBoxColor == "red"}
+            type="radio"
+            name="color"
+            id="red"
+            value={"red"}
+            // checked={boundingBoxColor == "red"}
+          />
+          <label htmlFor="red"> Red</label>
+        </div>
+
+        <div>
+          <input
+            onChange={onColorPicked}
+            checked={boundingBoxColor == "green"}
+            type="radio"
+            name="color"
+            id="green"
+            value={"green"}
+          />
+          <label htmlFor="green"> Green</label>
+        </div>
+
+        <div>
+          <input
+            onChange={onColorPicked}
+            checked={boundingBoxColor == "blue"}
+            type="radio"
+            name="color"
+            id="blue"
+            value={"blue"}
+          />
+          <label htmlFor="blue"> Blue</label>
+        </div>
+
+        {/* <div className="slidecontainer">
+          <input
+            onChange={(e) => {
+              // console.log("onchange slider gan");
+              let val = e.target.value
+              setBoundingBoxWidth(`${val}`)
+            }}
+            type="range"
+            min="4"
+            max="8"
+            className="slider"
+            id="myRange"
+          />
+        </div> */}
+      </>
+    )
+  }
+
   return (
     <div
+      className="bg-yellow-100"
       style={{
         padding: 16,
       }}
@@ -69,12 +124,20 @@ export default function About() {
         onSubmit={(e) => {
           e.preventDefault()
 
-          getClassification()
+          validate()
         }}
       >
         <div className="form-group">
-          <label htmlFor="file-upload">Choose a file:</label>
+          <label
+            className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+            htmlFor="file_input"
+          >
+            Upload file
+          </label>
           <input
+            className="block w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400"
+            id="file_input"
+            type="file"
             onChange={(e) => {
               // clear state Data
               setData(null)
@@ -90,78 +153,42 @@ export default function About() {
               console.log("reader read data gan")
               reader.readAsDataURL(e.target.files[0])
             }}
+          />
+
+          {/* <label htmlFor="file-upload">Choose a file:</label>
+          <input
+            onChange={(e) => {
+              
+            }}
             type="file"
             id="file-upload"
             name="file-upload"
-          />
+          /> */}
         </div>
 
-        <div>
-          <input
-            onChange={onColorPicked}
-            type="radio"
-            name="color"
-            id="red"
-            value={"red"}
-            defaultChecked
-            // checked={boundingBoxColor == "red"}
-          />
-          <label htmlFor="red"> Red</label>
-        </div>
+        {radioAndSlider()}
 
-        <div>
-          <input
-            onChange={onColorPicked}
-            type="radio"
-            name="color"
-            id="green"
-            value={"green"}
-          />
-          <label htmlFor="green"> Green</label>
-        </div>
-
-        <div>
-          <input
-            onChange={onColorPicked}
-            type="radio"
-            name="color"
-            id="blue"
-            value={"blue"}
-          />
-          <label htmlFor="blue"> Blue</label>
-        </div>
-
-        <div className="slidecontainer">
-          <input
-            onChange={(e) => {
-              // console.log("onchange slider gan");
-              let val = e.target.value
-              setBoundingBoxWidth(`${val}`)
-            }}
-            type="range"
-            min="4"
-            max="8"
-            className="slider"
-            id="myRange"
-          />
-        </div>
-
-        {loading ? <p>Loading...</p> : <></>}
+        {loading ? <Loading /> : <></>}
 
         <div style={{ marginTop: 8 }}>
-          <input type="submit" value="Classify" className="btn" />
+          <input
+            type="submit"
+            value="Classify"
+            className="btn cursor-pointer "
+          />
         </div>
       </form>
 
       <div
         style={{
           position: "relative",
+          marginTop: 16,
         }}
       >
         <img style={{}} src={imgPreview} />
         {data ? (
           <>
-            <div
+            {/* <div
               className="absolute"
               style={{
                 border: `solid ${boundingBoxWidth}px ${boundingBoxColor}`,
@@ -171,7 +198,7 @@ export default function About() {
                 width: data.x2 - data.x1,
                 height: data.y2 - data.y1,
               }}
-            ></div>
+            ></div> */}
 
             <p
               style={{
@@ -179,8 +206,8 @@ export default function About() {
                 fontWeight: "bold",
                 fontSize: 32,
                 position: "absolute",
-                left: data.x1,
-                top: data.y1,
+                left: 0,
+                top: 0,
               }}
             >
               {data.label}
