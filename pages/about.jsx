@@ -38,6 +38,10 @@ export default function About() {
     axios
       .post(`${BASE_URL}/detectbatik`, formData)
       .then(({ data: res }) => {
+        if (res.status == 0) {
+          alert("Terjadi kesalahan saat getClassification " + res.err)
+          return
+        }
         // Berhasil Get Data6
         console.log("berhasil gan", res)
         setData(res)
@@ -138,7 +142,12 @@ export default function About() {
             className="block w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400"
             id="file_input"
             type="file"
+            accept=".jpg,.jpeg,.png"
             onChange={(e) => {
+              if (e.target.files.length==0){
+                // user gak jadi memilih file
+                return
+              }
               // clear state Data
               setData(null)
 
@@ -185,7 +194,6 @@ export default function About() {
           marginTop: 16,
         }}
       >
-        <img style={{}} src={imgPreview} />
         {data ? (
           <>
             {/* <div
@@ -205,7 +213,7 @@ export default function About() {
                 color: boundingBoxColor,
                 fontWeight: "bold",
                 fontSize: 32,
-                position: "absolute",
+                // position: "absolute",
                 left: 0,
                 top: 0,
               }}
@@ -214,6 +222,8 @@ export default function About() {
             </p>
           </>
         ) : null}
+
+        <img style={{}} src={imgPreview} />
       </div>
     </div>
   )
