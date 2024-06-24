@@ -124,6 +124,7 @@ export default function About() {
         padding: 16,
       }}
     >
+      {/* Form pilihan input radio */}
       <form
         onSubmit={(e) => {
           e.preventDefault()
@@ -144,7 +145,7 @@ export default function About() {
             type="file"
             accept=".jpg,.jpeg,.png"
             onChange={(e) => {
-              if (e.target.files.length==0){
+              if (e.target.files.length == 0) {
                 // user gak jadi memilih file
                 return
               }
@@ -175,28 +176,16 @@ export default function About() {
           /> */}
         </div>
 
-        {radioAndSlider()}
-
-        {loading ? <Loading /> : <></>}
-
-        <div style={{ marginTop: 8 }}>
-          <input
-            type="submit"
-            value="Classify"
-            className="btn cursor-pointer "
-          />
-        </div>
-      </form>
-
-      <div
-        style={{
-          position: "relative",
-          marginTop: 16,
-        }}
-      >
-        {data ? (
-          <>
-            {/* <div
+        {/* Preview Image */}
+        <div
+          style={{
+            position: "relative",
+            marginTop: 16,
+          }}
+        >
+          {data ? (
+            <>
+              {/* <div
               className="absolute"
               style={{
                 border: `solid ${boundingBoxWidth}px ${boundingBoxColor}`,
@@ -208,23 +197,36 @@ export default function About() {
               }}
             ></div> */}
 
-            <p
-              style={{
-                color: boundingBoxColor,
-                fontWeight: "bold",
-                fontSize: 32,
-                // position: "absolute",
-                left: 0,
-                top: 0,
-              }}
-            >
-              {data.label}
-            </p>
-          </>
-        ) : null}
+              <p
+                style={{
+                  color: boundingBoxColor,
+                  fontWeight: "bold",
+                  fontSize: 32,
+                  // position: "absolute",
+                  left: 0,
+                  top: 0,
+                }}
+              >
+                {data.label}
+              </p>
+            </>
+          ) : null}
 
-        <img style={{}} src={imgPreview} />
-      </div>
+          <img style={{}} src={imgPreview} />
+        </div>
+
+        {/* {radioAndSlider()} */}
+
+        {loading ? <Loading /> : <></>}
+
+        <div style={{ marginTop: 8 }}>
+          <input
+            type="submit"
+            value="Classify"
+            className="btn cursor-pointer "
+          />
+        </div>
+      </form>
     </div>
   )
 }
